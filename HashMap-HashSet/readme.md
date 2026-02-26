@@ -150,3 +150,9 @@ HashMap<K, V> 是 Rust 标准库 std::collections 下的哈希表实现，用于
         println!("orange 不存在，跳过修改");
     }
     ```
+
+# HashSet
+
+是Hash集合，本质是`Hash<T,()>`的封装(值是空元组，仅存储键)，存储唯一的元素，不允许重复，常用于判断元素是否存在、去重等场景。
+
+> 跟js里面的Set类型比较类似。
