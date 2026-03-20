@@ -9,8 +9,8 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Home', link: '/rust-learning' },
-      { text: 'Basic', link: '/rust-learning/basic-docs' }
+      { text: 'Home', link: '/' },
+      { text: 'Basic', link: '/basic-docs' }
     ],
 
     sidebar: 
