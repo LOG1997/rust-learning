@@ -8,10 +8,14 @@ permissions:
   contents: write  # 必须显式赋予写权限，默认是 read-only
   pull-requests: read
 
-  
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest  # 或者你选择的任何其他运行环境
+
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
