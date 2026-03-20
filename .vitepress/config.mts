@@ -33,7 +33,7 @@ async function getSidebarItems(mdPath: string) {
   // 生成侧边栏配置
   return dirs.map(dir => ({
     text: dir,  // 文件夹名称作为显示文本
-    link: `/rust-learning/${mdPath}/${dir}/readme`,
+    link: `${mdPath}/${dir}/readme`,
   }))
 
 }
