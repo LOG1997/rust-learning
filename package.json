@@ -1,0 +1,28 @@
+{
+    "name": "rust-learning",
+    "version": "0.0.1",
+    "description": "rust学习文档",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "docs:dev": "vitepress dev",
+        "docs:build": "vitepress build",
+        "docs:preview": "vitepress preview"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LOG1997/rust-learning.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/LOG1997/rust-learning/issues"
+    },
+    "homepage": "https://github.com/LOG1997/rust-learning#readme",
+    "devDependencies": {
+        "vitepress": "2.0.0-alpha.17"
+    },
+    "dependencies": {
+        "globby": "^16.1.1"
+    }
+}

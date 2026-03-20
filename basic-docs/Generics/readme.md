@@ -56,8 +56,7 @@
     ```
 
 3. 泛型枚举：
-    核心库中的**Option<T>和Result<T, E>**都是基于泛型实现的。
-    自定义泛型枚举的话
+    核心库中的`Option<T>`和`Result<T, E>`都是基于泛型实现的。自定义泛型枚举的话
 
     ```rust
     enum MyEnum<T, U> {
