@@ -4,12 +4,13 @@ import { globby } from 'globby'
 export default defineConfig({
   title: "Rust Learning Docs",
   description: "My Rust Learning Docs",
+  base: '/rust-learning',
   outDir: './dist',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Basic', link: '/basic-docs' }
+      { text: 'Home', link: '/rust-learning' },
+      { text: 'Basic', link: '/rust-learning/basic-docs' }
     ],
 
     sidebar: 
@@ -32,7 +33,7 @@ async function getSidebarItems(mdPath: string) {
   // 生成侧边栏配置
   return dirs.map(dir => ({
     text: dir,  // 文件夹名称作为显示文本
-    link: `/${mdPath}/${dir}/readme`,
+    link: `/rust-learning/${mdPath}/${dir}/readme`,
   }))
 
 }

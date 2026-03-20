@@ -24,7 +24,7 @@ onMounted(() => {
     .filter(p => p.startsWith(currentPath) && p !== currentPath)
     .map(p => ({
       name: p.replace(currentPath, '').split('/')[1],
-      path: p.replace('/readme.md', '/readme'),
+      path: '/rust-learning'+p.replace('/readme.md', '/readme'),
     }))
     .filter((v, i, a) => a.findIndex(t => t.path === v.path) === i)
 })
