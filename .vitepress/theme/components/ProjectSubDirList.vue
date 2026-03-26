@@ -14,7 +14,7 @@ const subDirs = ref([])
 
 // VitePress 中无法直接扫描文件系统，需要在构建时生成数据
 // 这里使用预定义的数据或通过 import.meta.glob 导入
-const dirData = import.meta.glob('/basic-docs/**/readme.md', { as: 'raw' })
+const dirData = import.meta.glob(`/project-docs/**/readme.md`, { as: 'raw' })
 onMounted(() => {
   // 处理目录数据，提取子目录列表
   const currentPath = props.dirPath

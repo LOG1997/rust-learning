@@ -14,4 +14,4 @@ hero:
       link: /basic-docs
     - theme: alt
       text: 项目实战
-      link: /projects-docs
+      link: /project-docs
