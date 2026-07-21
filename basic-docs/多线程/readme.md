@@ -107,3 +107,7 @@ fn main() {
     }
 }
 ```
+
+关于异步编程，具体信息可以参看rust的异步运行时框架[tokio官网](https://tokio.rs/tokio/tutorial)或者[tokio crate](https://crates.io/crates/tokio)或者[tokio github](https://github.com/tokio-rs/tokio)。
+
+本项目关于tokio亦有整理，[点击跳转](../tokio/readme.md)
