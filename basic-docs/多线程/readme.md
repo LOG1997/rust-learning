@@ -111,3 +111,10 @@ fn main() {
 关于异步编程，具体信息可以参看rust的异步运行时框架[tokio官网](https://tokio.rs/tokio/tutorial)或者[tokio crate](https://crates.io/crates/tokio)或者[tokio github](https://github.com/tokio-rs/tokio)。
 
 本项目关于tokio亦有整理，[点击跳转](../tokio/readme.md)
+
+## 互斥锁（Mutex）和原子引用计数（Arc）
+
+Mutex和Arc经常配合起来使用，用于多线程并发访问数据。
+
+* Mutex：互斥锁，保证同一时间只有一个线程访问数据。
+* Arc：原子引用计数，允许多个所有者共享同一份数据，。
