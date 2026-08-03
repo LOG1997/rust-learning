@@ -112,9 +112,76 @@ fn main() {
 
 本项目关于tokio亦有整理，[点击跳转](../tokio/readme.md)
 
-## 互斥锁（Mutex）和原子引用计数（Arc）
+## 锁
+
+### 互斥锁（Mutex）和原子引用计数（Arc）
 
 Mutex和Arc经常配合起来使用，用于多线程并发访问数据。
 
 * Mutex：互斥锁，保证同一时间只有一个线程访问数据。
-* Arc：原子引用计数，允许多个所有者共享同一份数据，。
+* Arc：原子引用计数，允许多个所有者共享同一份数据。
+
+使用`Mutex`创建一份共享数据，需要访问数据时，使用`lock()`方法获取锁，并返回一个`MutexGuard`对象，该对象实现了`Deref` trait，因此可以使用`*`运算符访问数据。
+
+> 同一时间只允许一个线程访问该值，其他线程访问需要等待别的线程访问后才能继续。
+
+<span style="background-color: yellow;padding:3px 4px">请默写一份代码，使用Mutex和Arc在多个线程中对计数器+1，知道循环结束。</span>
+
+### 死锁
+
+死锁是指多个线程互相等待对方释放锁，导致无法继续执行。
+
+详细过程：
+条件：
+有两把锁：锁A和锁B；两个线程：线程1和线程2。
+
+1. 线程1获取锁A，线程2获取锁B。（几乎同时获取）
+2. 线程1去获取锁B，线程2去获取锁A，互相索要对方线程持有的锁，但是两个锁都被对应线程持有无法解锁（因为线程1需要获取锁B才能完成工作释放锁A，线程2需要获取锁A才能完成工作释放锁B）。
+
+双方都在等待对方释放锁，导致程序无法继续执行。
+
+**解决方法**：
+
+可以使用try_lock方法来尝试获取锁，如果获取锁失败则返回错误，不会阻塞代码执行。
+
+### 读写锁（RwLock）
+
+RwLock是一种读写锁，它可以同时允许多个线程读，但只能有一个线程写。
+
+### 信号量（Semaphore）
+
+Semaphore是一种信号量，它可以限制当前正在运行的任务的最大数量。因为标准库中的Semaphore不稳定所以不推荐使用，推荐的是使用 `tokio::sync::Semaphore`.
+
+使用`Semaphore::new(n)`创建一个信号量，其中n是信号量的最大数量。
+
+执行任务需要使用`Semaphore::acquire()`获取一个信号量，获取成功后任务才能继续执行，未获取到需要等待。
+
+如果需要跨线程传递信号量，可以使用`Arc<Semaphore>`，然后使用`acquire_owned()`方法获取信号量。
+
+示例代码：
+
+```rust
+use std::sync::Arc;
+use tokio::sync::Semaphore;
+
+#[tokio::main]
+
+async fn main() {
+    let semaphore = Arc::new(Semaphore::new(3));
+    let mut join_handles = Vec::new();
+
+    for i in 0..10 {
+        let permit = semaphore.clone().acquire_owned().await.unwrap();
+
+        join_handles.push(tokio::spawn(async move {
+            // 在这里执行任务...
+            println!("dooooo :{}", i);
+            drop(permit);
+        }));
+    }
+    for handle in join_handles {
+        handle.await.unwrap();
+    }
+}
+
+```
