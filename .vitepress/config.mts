@@ -10,7 +10,8 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
             { text: 'Home', link: '/' },
-            { text: 'Basic', link: '/basic-docs' }
+            { text: 'Basic', link: '/basic-docs' },
+            { text: 'Crate', link: '/crate-docs' }
         ],
 
         sidebar: {
@@ -20,6 +21,9 @@ export default defineConfig({
             ],
             '/project-docs/': [
                 { text: 'Project', items: await getSidebarItems('project-docs') }
+            ],
+            '/crate-docs/': [
+                { text: 'Crate', items: await getSidebarItems('crate-docs') }
             ]
         },
         socialLinks: [
@@ -36,17 +40,17 @@ async function getSidebarItems(mdPath: string, currentPath: string = ''): Promis
         onlyDirectories: true
     })
     dirs = dirs.filter(dir => dir !== 'node_modules')
+    dirs = dirs.filter(dir => !dir.startsWith('_'))
 
     return await Promise.all(dirs.map(async (dir) => {
         const dirFullPath = `${fullPath}/${dir}`
-
         // 检查是否有子目录
         let subDirs = await globby('*', {
             cwd: `./${dirFullPath}`,
             onlyDirectories: true
         })
         subDirs = subDirs.filter(d => d !== 'node_modules')
-
+        subDirs = subDirs.filter(d => !d.startsWith('_'))
         if (subDirs.length > 0) {
             // 有子目录，生成嵌套菜单
             return {
