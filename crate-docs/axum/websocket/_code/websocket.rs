@@ -1,11 +1,23 @@
-use anyhow::{Ok, Result};
+use anyhow::Result;
 use axum::{
     Router,
-    extract::{WebSocketUpgrade, ws::WebSocket},
+    extract::{
+        ConnectInfo, Query, WebSocketUpgrade,
+        ws::{Message, WebSocket},
+    },
+    http::HeaderMap,
     response::Response,
     routing::any,
 };
 use axum_extra::TypedHeader;
+use futures_util::{SinkExt, StreamExt};
+use serde::Deserialize;
+use std::net::SocketAddr;
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+struct QueryAuth {
+    token: String,
+}
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -13,19 +25,43 @@ async fn main() -> Result<()> {
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:7621").await?;
 
-    axum::serve(listener, app).await?;
+    axum::serve(
+        listener,
+        app.into_make_service_with_connect_info::<SocketAddr>(),
+    )
+    .await?;
     Ok(())
 }
 
 async fn ws_handler(
     ws: WebSocketUpgrade,
     user_agent: Option<TypedHeader<headers::UserAgent>>,
+    ConnectInfo(addr): ConnectInfo<SocketAddr>,
+    headers: HeaderMap,
+    Query(token): Query<QueryAuth>,
 ) -> Response {
-    println!("user agent: {:?}", user_agent);
+    println!("params is:\n  {addr:?} \n {user_agent:?} \n {headers:?} \n {token:?}");
     ws.on_upgrade(handle_socket)
 }
-async fn handle_socket(mut socket: WebSocket) {
-    while let Some(msg) = socket.recv().await {
-        println!("msg is {:?}", msg);
-    }
+async fn handle_socket(socket: WebSocket) {
+    let (mut sender, mut receiver) = socket.split();
+    tokio::spawn(async move {
+        while let Some(Ok(msg)) = receiver.next().await {
+            match msg {
+                Message::Text(text) => {
+                    println!("text is {}", text);
+                    sender.send(Message::Text(text)).await.ok();
+                }
+                Message::Binary(data) => {
+                    println!("binary is {:?}", data);
+                    sender.send(Message::Binary(data)).await.ok();
+                }
+                _ => {
+                    println!("unknown message type");
+                }
+            }
+        }
+    })
+    .await
+    .ok();
 }
