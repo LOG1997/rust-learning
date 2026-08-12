@@ -4,6 +4,8 @@
 
 只需要在请求的处理函数（Handler）中指明需要哪些参数，axum会自动从请求中提取这些参数，并传递给处理函数。
 
+！！！请注意，会消费数据的提取器，应该放到最后，因为数据消费了，后面的提取器就不能使用了，比如Json提取器就需要放到最后。
+
 例如：
 
 ```rust
@@ -32,3 +34,4 @@ async fn my_handler(
 | `TypedHeader<T>` | 从请求头中获取指定类型的数据，这是类型安全的 | `TypedHeader(user_agent): TypedHeader<UserAgent>` | `User-Agent: Mozilla/5.0` |
 | `RequestBody<Body>` | 获取到完整的请求体、包括方法、uri等。 | `RequestBody(body)` | {"method": "POST"} |
 | `State<T>` | 共享状态，比如共享的数据库连接池。 | `State(state):State<AppState>` | -- |
+| `Extension<T>` | 扩展状态，比如中间件中设置的状态。 | `Extension(auth_user):Extension<AuthUser>` | -- |
