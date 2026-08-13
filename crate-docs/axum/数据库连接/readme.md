@@ -29,25 +29,27 @@ sqlx会自动读取.env中的DATABASE_URL环境变量来创建/连接数据库�
 
 1. 直接安装`sqlx-cli`，用于数据库迁移操作。
 
-```bash
-# supports all databases supported by SQLx
-cargo install sqlx-cli
-```
+    ```bash
+    # supports all databases supported by SQLx
+    cargo install sqlx-cli
+    ```
 
-1. 创建并运行数据库迁移。
+2. 创建并运行数据库迁移。
 
-```bash
-# 根据.env中的database_url创建数据库
-slqx database create
+    ```bash
+    # 根据.env中的database_url创建数据库
+    slqx database create
 
-# 创建迁移文件
-sqlx migrate add create_users_table
+    # 创建迁移文件
+    sqlx migrate add create_users_table
 
-# 编辑sql文件
+    # 编辑sql文件
 
-# 运行迁移文件
-sqlx migrate run
-```
+    # 运行迁移文件
+    sqlx migrate run
+    ```
+
+3. 如果数据库结构有变化，则需要重新创建迁移文件并运行迁移文件。但是编译时校验还是会报错，因为sqlx读取的本地缓存并不知道数据库结构已经变化了。目前我的解决办法是执行`cargo clean`清除本地构建的产物后再次`cargo build`，这样构建时校验就会通过。
 
 ### 创建连接池
 
