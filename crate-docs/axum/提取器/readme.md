@@ -35,3 +35,7 @@ async fn my_handler(
 | `RequestBody<Body>` | 获取到完整的请求体、包括方法、uri等。 | `RequestBody(body)` | {"method": "POST"} |
 | `State<T>` | 共享状态，比如共享的数据库连接池。 | `State(state):State<AppState>` | -- |
 | `Extension<T>` | 扩展状态，比如中间件中设置的状态。 | `Extension(auth_user):Extension<AuthUser>` | -- |
+
+> Extension提取器不能跨项目提取，只能提取在本项目中注入的extension数据。
+
+> 如果不确定是否传入，可以指定为Option<T>类型，其中T为HeaderMap等这些类型。

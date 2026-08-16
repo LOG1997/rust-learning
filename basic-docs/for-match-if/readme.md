@@ -180,3 +180,21 @@ fn main() {
     // 输出: x 为 0，y = 5
 }
 ```
+
+使用match还可以用来匹配Result中的值，适用情况：
+
+存在一个`Result<String>`值，但是明确需要`String`值将其赋值给变量，可以使用match进行匹配赋值。如果是`Err`的话，可以遵循主函数的返回类型直接`return Err`。
+
+```rust
+let r: Result<String, _> = Ok("Hello".to_string());
+let t = match r {
+    Ok(s) => s,   // 成功时提取 String
+    Err(e) => {
+        // 处理错误，可以返回一个默认值、打印日志等
+        eprintln!("出错了: {}", e);
+        "fallback".to_string()
+    }
+};
+```
+
+当然也可以使用`if let`进行提取这个值。

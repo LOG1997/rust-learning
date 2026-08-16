@@ -38,7 +38,7 @@ sqlx会自动读取.env中的DATABASE_URL环境变量来创建/连接数据库�
 
     ```bash
     # 根据.env中的database_url创建数据库
-    slqx database create
+    sqlx database create
 
     # 创建迁移文件
     sqlx migrate add create_users_table

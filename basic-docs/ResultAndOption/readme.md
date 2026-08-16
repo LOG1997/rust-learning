@@ -68,3 +68,40 @@
     >? 运算符所作用的类型，必须与当前函数返回的包裹类型（Wrapper）严格匹配。
     >在返回 Result 的函数里，? 只能作用于 Result。
     >在返回 Option 的函数里，? 只能作用于 Option。
+
+## Result
+
+1. 转换错误值/转换成功值
+
+这两个方法都会消费原来的`Result`。
+
+**map_err**:
+
+在函数中执行某个方法后，返回的错误类型（Err_A）可能与期望的错误类型（Err_B）不一样，这样我们就需要将Err_A转换成Err_B，就需要使用到`map_err`方法，它只会在Result是Err时生效，将原有的错误值映射为一个新的错误值，`Ok`值不变。
+
+返回值仍然是`Result`类型。
+
+```rust
+use serde_json;
+
+fn serialize_config() -> Result<String, String> {
+    let config = serde_json::json!({"key": "value"});
+    // 将 serde_json::Error 转换为包含上下文的 String
+    serde_json::to_string_pretty(&config)
+        .map_err(|e| format!("序列化配置失败: {}", e))
+}
+```
+
+**map**:
+
+如果遇到成功值与期望值不一样怎么办呢，使用`.map`方法。这个方法处理的是`Ok`值。
+
+```rust
+ let r: Result<i32, _> = parse_number("42");
+    // 对成功值加 10
+    let mapped = r.map(|n| n + 10);
+    assert_eq!(mapped, Ok(52));
+
+    // 如果出错，map 不执行闭包，直接透传错误
+    let err = parse_number("abc").map(|n| n + 10);
+```
