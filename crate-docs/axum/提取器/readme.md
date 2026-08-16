@@ -32,10 +32,10 @@ async fn my_handler(
 | `Form<T>` | 从请求体中提取表单数据。 | `Form(params): Form<CustomStructParams>` | `{"key1": "value1", "key2": "value2"}` |
 | `HeaderMap` | 从请求头中获取数据。 | `HeaderMap(headers)` | `headers` |
 | `TypedHeader<T>` | 从请求头中获取指定类型的数据，这是类型安全的 | `TypedHeader(user_agent): TypedHeader<UserAgent>` | `User-Agent: Mozilla/5.0` |
-| `RequestBody<Body>` | 获取到完整的请求体、包括方法、uri等。 | `RequestBody(body)` | {"method": "POST"} |
+| `RequestBody<Body>` | 获取到完整的请求体、包括方法、uri等。 | `RequestBody(body)` | `{"method": "POST"}` |
 | `State<T>` | 共享状态，比如共享的数据库连接池。 | `State(state):State<AppState>` | -- |
 | `Extension<T>` | 扩展状态，比如中间件中设置的状态。 | `Extension(auth_user):Extension<AuthUser>` | -- |
 
-> Extension提取器不能跨项目提取，只能提取在本项目中注入的extension数据。
+> Extension 提取器不能跨项目提取，只能提取在本项目中注入的extension数据。
 
-> 如果不确定是否传入，可以指定为Option<T>类型，其中T为HeaderMap等这些类型。
+> 如果不确定是否传入，可以指定为`Option<T>`类型，其中T为HeaderMap等这些类型。
