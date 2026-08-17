@@ -93,6 +93,9 @@ fn main(){
     println!("{}",zero);
 }
 
+// 或者可以直接设置值
+
+let name_hash=NAME_HASH.ste(init_data.clone());
 ```
 
 ### Lazy
